@@ -1,6 +1,9 @@
 package com.jornadamilhas.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,20 @@ public class DepoimentoService {
 	public String deletarPorID(Long id) {
 		repository.deleteById(id);
 		return ("Depoimento deletado com sucesso!");
+	}
+	
+//	Utilizar pageable para limitar
+	@Transactional(readOnly = true)
+	public List<DepoimentoDTO> listaRandom(){
+		var depoimentos = repository.findAll();	
+		
+		var listaRandom = depoimentos.stream()
+				.map(DepoimentoDTO::new)
+				.collect(Collectors.toCollection(ArrayList::new));			
+		
+		Collections.shuffle(listaRandom);
+		
+		return listaRandom.stream().limit(3).toList();
 	}
 
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jornadamilhas.dto.DepoimentoDTO;
@@ -17,32 +16,38 @@ import com.jornadamilhas.dto.DepoimentoUpdaterDTO;
 import com.jornadamilhas.service.DepoimentoService;
 
 @RestController
-@RequestMapping("/depoimentos")
 public class DepoimentoController {
 
+	public static final String URI = "/depoimentos";
+	
 	@Autowired
 	private DepoimentoService depoimentoService;
 	
-	@PostMapping
+	@PostMapping(URI)
 	public ResponseEntity salvar(@RequestBody DepoimentoDTO depoimento) {
 		var retorno = depoimentoService.salvarDepoimento(depoimento);
 		return ResponseEntity.status(HttpStatus.CREATED).body(retorno);
 	}	
 	
-	@GetMapping
+	@GetMapping(URI)
 	public ResponseEntity exibir() {	
 		return ResponseEntity.ok(depoimentoService.listarDepoimentos());
 	}
 	
-	@PutMapping
+	@PutMapping(URI)
 	public ResponseEntity atualizar(@RequestBody DepoimentoUpdaterDTO dados) {
 		var depoimentoAtualizado = depoimentoService.atualizarPorId(dados);
 		return ResponseEntity.ok(depoimentoAtualizado);	
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping(URI+"/{id}")
 	public ResponseEntity deletar(@PathVariable Long id) {
 		return ResponseEntity.ok(depoimentoService.deletarPorID(id));
+	}
+	
+	@GetMapping(URI+"-home")
+	public ResponseEntity exibirRandom() {
+		return ResponseEntity.ok(depoimentoService.listaRandom());
 	}
 	
 }
