@@ -25,8 +25,8 @@ public class DepoimentoController {
 	
 	@PostMapping(URI)
 	public ResponseEntity salvar(@RequestBody DepoimentoDTO depoimento) {
-		var retorno = depoimentoService.salvarDepoimento(depoimento);
-		return ResponseEntity.status(HttpStatus.CREATED).body(retorno);
+		var depoimentoSalvo = depoimentoService.salvarDepoimento(depoimento);
+		return ResponseEntity.status(HttpStatus.CREATED).body(depoimentoSalvo);
 	}	
 	
 	@GetMapping(URI)

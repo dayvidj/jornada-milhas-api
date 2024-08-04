@@ -21,21 +21,21 @@ public class DepoimentoService {
 	private DepoimentoRepository repository;
 	
 	@Transactional
-	public String salvarDepoimento(DepoimentoDTO dados) {
-		repository.save(new Depoimento(dados));
-		return "Depoimento salvo com sucesso!";
+	public DepoimentoUpdaterDTO salvarDepoimento(DepoimentoDTO dados) {
+		var depoimento = repository.save(new Depoimento(dados));
+		return new DepoimentoUpdaterDTO(depoimento);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<DepoimentoDTO> listarDepoimentos() {
-		return repository.findAll().stream().map(DepoimentoDTO::new).toList(); 
+	public List<DepoimentoUpdaterDTO> listarDepoimentos() {
+		return repository.findAll().stream().map(DepoimentoUpdaterDTO::new).toList(); 
 	}
 
 	@Transactional
-	public DepoimentoDTO atualizarPorId(DepoimentoUpdaterDTO dados) {
+	public DepoimentoUpdaterDTO atualizarPorId(DepoimentoUpdaterDTO dados) {
 		var depoimento = repository.getReferenceById(dados.id());
 		depoimento.atualizarDados(dados);
-		return new DepoimentoDTO(depoimento);
+		return new DepoimentoUpdaterDTO(depoimento);
 	}
 
 	@Transactional
@@ -44,13 +44,12 @@ public class DepoimentoService {
 		return ("Depoimento deletado com sucesso!");
 	}
 	
-//	Utilizar pageable para limitar
 	@Transactional(readOnly = true)
-	public List<DepoimentoDTO> listaRandom(){
+	public List<DepoimentoUpdaterDTO> listaRandom(){
 		var depoimentos = repository.findAll();	
 		
 		var listaRandom = depoimentos.stream()
-				.map(DepoimentoDTO::new)
+				.map(DepoimentoUpdaterDTO::new)
 				.collect(Collectors.toCollection(ArrayList::new));			
 		
 		Collections.shuffle(listaRandom);
