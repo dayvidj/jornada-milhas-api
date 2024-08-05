@@ -18,7 +18,7 @@ import com.jornadamilhas.service.DepoimentoService;
 @RestController
 public class DepoimentoController {
 
-	public static final String URI = "/depoimentos";
+	private static final String URI = "/depoimentos";
 	
 	@Autowired
 	private DepoimentoService depoimentoService;
