@@ -2,6 +2,7 @@ package com.jornadamilhas.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,8 @@ import com.jornadamilhas.dto.DepoimentoDTO;
 import com.jornadamilhas.dto.DepoimentoUpdaterDTO;
 import com.jornadamilhas.service.DepoimentoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class DepoimentoController {
 
@@ -24,7 +27,7 @@ public class DepoimentoController {
 	private DepoimentoService depoimentoService;
 	
 	@PostMapping(URI)
-	public ResponseEntity salvar(@RequestBody DepoimentoDTO depoimento) {
+	public ResponseEntity salvar(@RequestBody @Valid DepoimentoDTO depoimento) {
 		var depoimentoSalvo = depoimentoService.salvarDepoimento(depoimento);
 		return ResponseEntity.status(HttpStatus.CREATED).body(depoimentoSalvo);
 	}	
@@ -42,7 +45,7 @@ public class DepoimentoController {
 	
 	@DeleteMapping(URI+"/{id}")
 	public ResponseEntity deletar(@PathVariable Long id) {
-		return ResponseEntity.ok(depoimentoService.deletarPorID(id));
+		return ResponseEntity.ok(depoimentoService.deletarPorID(id));	
 	}
 	
 	@GetMapping(URI+"-home")

@@ -14,6 +14,8 @@ import com.jornadamilhas.dto.DepoimentoUpdaterDTO;
 import com.jornadamilhas.model.Depoimento;
 import com.jornadamilhas.repository.DepoimentoRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class DepoimentoService {
 	
@@ -33,17 +35,25 @@ public class DepoimentoService {
 
 	@Transactional
 	public DepoimentoUpdaterDTO atualizarPorId(DepoimentoUpdaterDTO dados) {
+		if(!repository.existsById(dados.id())) {
+			throw new EntityNotFoundException("Depoimento não encontrado");
+		}
+		
 		var depoimento = repository.getReferenceById(dados.id());
 		depoimento.atualizarDados(dados);
+		
 		return new DepoimentoUpdaterDTO(depoimento);
 	}
 
 	@Transactional
 	public String deletarPorID(Long id) {
+		if(!repository.existsById(id)) {
+			throw new EntityNotFoundException("Depoimento não encontrado");
+		}
 		repository.deleteById(id);
-		return ("Depoimento deletado com sucesso!");
+		return "Depoimento deletado com sucesso!";
 	}
-	
+	 
 	@Transactional(readOnly = true)
 	public List<DepoimentoUpdaterDTO> listaRandom(){
 		var depoimentos = repository.findAll();	

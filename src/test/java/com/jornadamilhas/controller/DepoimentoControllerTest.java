@@ -41,8 +41,7 @@ class DepoimentoControllerTest {
 		
 		// ACT: Executa a ação a ser testada
 	    // Simula uma requisição POST para o endpoint "/depoimentos" com o JSON criado
-		var response = mvc.perform(
-				post("/depoimentos")
+		var response = mvc.perform(post("/depoimentos")
 				.content(json)
 				.contentType(MediaType.APPLICATION_JSON)
 		).andReturn().getResponse();
@@ -55,8 +54,7 @@ class DepoimentoControllerTest {
 	@Test
 	void testDeveRetornarStatus200QuandoConsultaDepoimentos() throws Exception {
 		//ACT
-		var response = mvc.perform(
-				get("/depoimentos"))
+		var response = mvc.perform(get("/depoimentos"))
 				.andReturn()
 				.getResponse();
 		//ASSERT
@@ -75,8 +73,7 @@ class DepoimentoControllerTest {
 				""";
 		
 		//ACT
-		var response = mvc.perform(
-				put("/depoimentos")
+		var response = mvc.perform(put("/depoimentos")
 				.content(json)
 				.contentType(MediaType.APPLICATION_JSON)
 				).andReturn().getResponse();
@@ -91,20 +88,32 @@ class DepoimentoControllerTest {
 		Long idExistente = 1l;
 		
 		//ACT
-		var response = mvc.perform(
-				delete("/depoimentos/{id}", idExistente))
+		var response = mvc.perform(delete("/depoimentos/{id}", idExistente))
 				.andReturn()
 				.getResponse();
 		
 		//ASSERT
 		Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
 	}
+	
+//	@Test
+//	void testDeveRetornarStatus404QuandoTentaDeletarDepoimentoInexistente() throws Exception {
+//		//ARRENGE 
+//		Long idInexistente = 99l;
+//		
+//		//ACT
+//		var response = mvc.perform(delete("/depoimentos/{id}", idInexistente))
+//				.andReturn()
+//				.getResponse();
+//		
+//		//ASSERT
+//		Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+//	}
 
 	@Test
 	void testDeveRetornarStatus200QuandoExibeDepoimentosAleatorios() throws Exception {
 		//ACT
-		var response = mvc.perform(
-				get("/depoimentos-home"))
+		var response = mvc.perform(get("/depoimentos-home"))
 				.andReturn()
 				.getResponse();
 		
