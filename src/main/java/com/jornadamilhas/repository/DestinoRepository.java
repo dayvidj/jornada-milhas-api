@@ -6,4 +6,6 @@ import com.jornadamilhas.model.Destino;
 
 public interface DestinoRepository extends JpaRepository<Destino, Long> {
 	
+	Destino findByNome(String nome);
+
 }

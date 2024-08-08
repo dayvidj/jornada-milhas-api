@@ -52,9 +52,14 @@ public class DestinoService {
 		
 		return "Destino deletado com sucesso.";
 	}
-	
 
-	
-	
+	@Transactional(readOnly = true)
+	public DestinoUpdaterDTO buscarDestinoPeloNome(String nome) {
+		if(repository.findByNome(nome) == null) {
+			throw new EntityNotFoundException("Nenhum destino foi encontrado");
+		}
+		var destino = repository.findByNome(nome);
+		return new DestinoUpdaterDTO(destino);			
+	}
 	
 }
