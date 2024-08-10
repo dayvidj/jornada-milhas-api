@@ -32,8 +32,11 @@ class DestinoControllerTest {
 		//ARRENGE
 		String json = """
 				{
-					"foto": "teste",
+				    "fotoOne": "img.t1",
+				    "fotoTwo": "img.t2",
 				    "nome": "teste",
+				    "meta": "exemplo teste",
+				    "texto": "texto exemplo teste",
 				    "preco": 99.99
 			    }
 				""";

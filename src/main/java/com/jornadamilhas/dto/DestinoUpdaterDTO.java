@@ -9,11 +9,14 @@ import jakarta.validation.constraints.NotNull;
 public record DestinoUpdaterDTO(
 		@NotNull(message = "ID não pode ser nulo")
 		Long id, 
-		String foto, 
+		String fotoOne, 
+		String fotoTwo, 
 		String nome, 
+		String meta, 
+		String texto,  
 		BigDecimal preco) {
 
 	public DestinoUpdaterDTO(Destino destino) {
-		this(destino.getId(), destino.getFoto(), destino.getNome(), destino.getPreco());
+		this(destino.getId(), destino.getFotoOne(), destino.getFotoTwo(), destino.getNome(), destino.getMeta(), destino.getTexto(), destino.getPreco());
 	}
 }
