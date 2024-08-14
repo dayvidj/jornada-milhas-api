@@ -61,5 +61,14 @@ public class DestinoService {
 		var destino = repository.findByNome(nome);
 		return new DestinoUpdaterDTO(destino);			
 	}
+
+	@Transactional(readOnly = true)
+	public DestinoDTO detalharDestino(Long id) {
+		if(!repository.existsById(id)) {
+			throw new EntityNotFoundException("Nenhum destino foi encontrado");
+		}
+		var destino = new DestinoDTO(repository.getReferenceById(id));
+		return destino;
+	}
 	
 }

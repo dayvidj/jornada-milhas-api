@@ -111,4 +111,18 @@ class DestinoControllerTest {
 		Assertions.assertEquals(HttpStatus.OK.value(), response);
 	}
 	
+	@Test
+	void testDeveRestornarStatus200AoDetalharDestinoPeloID() throws Exception {
+		//ARRENGE
+		Long idExistente = 1l;
+		//ACT
+		var response = mvc.perform(get("/destinos/{id}", idExistente))
+				.andReturn()
+				.getResponse()
+				.getStatus();
+		//ASSERT
+		Assertions.assertEquals(HttpStatus.OK.value(), response);
+	}
+	
+	
 }

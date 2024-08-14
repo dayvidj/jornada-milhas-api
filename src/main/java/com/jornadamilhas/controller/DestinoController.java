@@ -36,7 +36,7 @@ public class DestinoController {
 	public ResponseEntity exibir() {
 		return ResponseEntity.ok(destinoService.exibirDestinos());
 	}
-	
+		
 	@PutMapping
 	public ResponseEntity atualizar(@RequestBody @Valid DestinoUpdaterDTO dadosAtualizacao) {
 		var destinoAtualizado = destinoService.atualizarDestino(dadosAtualizacao);
@@ -53,4 +53,9 @@ public class DestinoController {
 		return ResponseEntity.ok(destinoService.buscarDestinoPeloNome(nome));
 	}
 	
+	@GetMapping("/{id}")
+	public ResponseEntity detalhar(@PathVariable Long id) {
+		return ResponseEntity.ok(destinoService.detalharDestino(id));
+	}
+
 }
