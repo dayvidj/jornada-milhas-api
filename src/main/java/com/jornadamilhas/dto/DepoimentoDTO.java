@@ -1,5 +1,7 @@
 package com.jornadamilhas.dto;
 
+import com.jornadamilhas.model.Depoimento;
+
 import jakarta.validation.constraints.NotBlank;
 
 public record DepoimentoDTO(
@@ -9,4 +11,8 @@ public record DepoimentoDTO(
 		String texto, 
 		@NotBlank(message = "Campo nome inválido ou não informado")
 		String nome) {
+	
+	public DepoimentoDTO(Depoimento depoimento) {
+		this(depoimento.getFoto(), depoimento.getTexto(), depoimento.getNome());
+	}
 }

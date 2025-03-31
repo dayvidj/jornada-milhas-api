@@ -1,5 +1,7 @@
 package com.jornadamilhas.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,39 +24,39 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/destinos")
 public class DestinoController {
-	
+
 	@Autowired
 	private DestinoService destinoService;
-	
+
 	@PostMapping
-	public ResponseEntity salvar(@RequestBody DestinoDTO dadosDestino) {
+	public ResponseEntity<DestinoUpdaterDTO> salvar(@RequestBody DestinoDTO dadosDestino) {
 		var retorno = destinoService.salvarDestino(dadosDestino);
 		return ResponseEntity.status(HttpStatus.CREATED).body(retorno);
 	}
-	
+
 	@GetMapping
-	public ResponseEntity exibir() {
+	public ResponseEntity<List<DestinoUpdaterDTO>> exibir() {
 		return ResponseEntity.ok(destinoService.exibirDestinos());
 	}
-		
+
 	@PutMapping
-	public ResponseEntity atualizar(@RequestBody @Valid DestinoUpdaterDTO dadosAtualizacao) {
+	public ResponseEntity<DestinoDTO> atualizar(@RequestBody @Valid DestinoUpdaterDTO dadosAtualizacao) {
 		var destinoAtualizado = destinoService.atualizarDestino(dadosAtualizacao);
-		return ResponseEntity.ok(destinoAtualizado); 
+		return ResponseEntity.ok(destinoAtualizado);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity deletar(@PathVariable Long id) {
+	public ResponseEntity<String> deletar(@PathVariable Long id) {
 		return ResponseEntity.ok(destinoService.deletarDestino(id));
 	}
-	
+
 	@GetMapping("/busca")
-	public ResponseEntity buscarPeloNome(@RequestParam String nome) {
-		return ResponseEntity.ok(destinoService.buscarDestinoPeloNome(nome));
+	public ResponseEntity<List<DestinoDTO>> buscarPeloNome(@RequestParam String nome) {
+		return ResponseEntity.ok(destinoService.buscarDestinosPeloNome(nome));
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity detalhar(@PathVariable Long id) {
+	public ResponseEntity<DestinoDTO> detalhar(@PathVariable Long id) {
 		return ResponseEntity.ok(destinoService.detalharDestino(id));
 	}
 

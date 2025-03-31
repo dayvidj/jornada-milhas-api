@@ -32,7 +32,7 @@ public class DestinoService {
 	}
 
 	@Transactional
-	public DestinoUpdaterDTO atualizarDestino(DestinoUpdaterDTO dadosAtualizacao) {
+	public DestinoDTO atualizarDestino(DestinoUpdaterDTO dadosAtualizacao) {
 		if(!repository.existsById(dadosAtualizacao.id())) {
 			throw new EntityNotFoundException("Destino não encontrado com id: "+dadosAtualizacao.id());
 		}
@@ -40,7 +40,7 @@ public class DestinoService {
 		var destino = repository.getReferenceById(dadosAtualizacao.id());
 		destino.atualizarDados(dadosAtualizacao);
 	
-		return new DestinoUpdaterDTO(destino);
+		return new DestinoDTO(destino);
 	}
 
 	@Transactional
@@ -54,21 +54,19 @@ public class DestinoService {
 	}
 
 	@Transactional(readOnly = true)
-	public DestinoUpdaterDTO buscarDestinoPeloNome(String nome) {
-		if(repository.findByNome(nome) == null) {
+	public List<DestinoDTO> buscarDestinosPeloNome(String nome) {
+		var destinos = repository.findByNome(nome);
+		if(destinos.isEmpty()) {
 			throw new EntityNotFoundException("Nenhum destino foi encontrado");
 		}
-		var destino = repository.findByNome(nome);
-		return new DestinoUpdaterDTO(destino);			
+		return destinos.stream().map(DestinoDTO::new).toList();			
 	}
 
 	@Transactional(readOnly = true)
 	public DestinoDTO detalharDestino(Long id) {
-		if(!repository.existsById(id)) {
-			throw new EntityNotFoundException("Nenhum destino foi encontrado");
-		}
-		var destino = new DestinoDTO(repository.getReferenceById(id));
-		return destino;
+		var destino = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Destino com ID " + id + " não encontrado"));
+
+	    return new DestinoDTO(destino);
 	}
 	
 }

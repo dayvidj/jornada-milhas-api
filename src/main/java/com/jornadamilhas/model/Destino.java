@@ -16,8 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Table(name = "destinos")
+@Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,7 +31,6 @@ public class Destino {
 	private String fotoOne;
 	@Column(name = "foto_2")
 	private String fotoTwo; 
-	
 	private String nome; 
 	private String meta; 
 	private String texto; 
