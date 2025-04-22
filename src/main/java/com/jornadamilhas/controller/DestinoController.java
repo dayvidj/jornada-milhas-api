@@ -29,7 +29,7 @@ public class DestinoController {
 	private DestinoService destinoService;
 
 	@PostMapping
-	public ResponseEntity<DestinoUpdaterDTO> salvar(@RequestBody DestinoDTO dadosDestino) {
+	public ResponseEntity<DestinoUpdaterDTO> salvar(@RequestBody @Valid DestinoDTO dadosDestino) {
 		var retorno = destinoService.salvarDestino(dadosDestino);
 		return ResponseEntity.status(HttpStatus.CREATED).body(retorno);
 	}

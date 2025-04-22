@@ -51,7 +51,7 @@ public class DepoimentoController {
 
 	@GetMapping("home")
 	public ResponseEntity<List<DepoimentoDTO>> exibirRandom() {
-		return ResponseEntity.ok(depoimentoService.listaRandom());
+		return ResponseEntity.ok(depoimentoService.listaAleatoria());
 	}
 
 }

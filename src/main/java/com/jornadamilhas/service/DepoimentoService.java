@@ -15,8 +15,6 @@ import com.jornadamilhas.exception.ObjetoNaoEncontadoException;
 import com.jornadamilhas.model.Depoimento;
 import com.jornadamilhas.repository.DepoimentoRepository;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 public class DepoimentoService {
 
@@ -46,14 +44,14 @@ public class DepoimentoService {
 	@Transactional
 	public String deletarPorID(Long id) {
 		if (!repository.existsById(id)) {
-			throw new EntityNotFoundException("Depoimento não encontrado");
+			throw new ObjetoNaoEncontadoException("Depoimento com ID "+id+" não existe.");
 		}
 		repository.deleteById(id);
 		return "Depoimento deletado com sucesso!";
 	}
 
 	@Transactional(readOnly = true)
-	public List<DepoimentoDTO> listaRandom() {
+	public List<DepoimentoDTO> listaAleatoria() {
 		var depoimentos = repository.findAll();
 
 		var listaRandom = depoimentos.stream().map(DepoimentoDTO::new)

@@ -4,12 +4,21 @@ import java.math.BigDecimal;
 
 import com.jornadamilhas.model.Destino;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public record DestinoDTO(
-		String fotoOne, 
-		String fotoTwo, 
-		String nome, 
-		String meta, 
-		String texto, 
+		@NotBlank(message = "Campo inválido ou não informado")
+		String fotoOne,
+		@NotBlank(message = "Campo inválido ou não informado")
+		String fotoTwo,
+		@NotBlank(message = "Campo inválido ou não informado")
+		String nome,
+		@NotBlank(message = "Campo inválido ou não informado")
+		String meta,
+		@NotBlank(message = "Campo inválido ou não informado")
+		String texto,
+		@NotNull(message = "O valor não pode ser nulo")
 		BigDecimal preco) {
 
 	public DestinoDTO(Destino destino) {

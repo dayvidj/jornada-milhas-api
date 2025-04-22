@@ -8,10 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jornadamilhas.dto.DestinoDTO;
 import com.jornadamilhas.dto.DestinoUpdaterDTO;
+import com.jornadamilhas.exception.ObjetoNaoEncontadoException;
 import com.jornadamilhas.model.Destino;
 import com.jornadamilhas.repository.DestinoRepository;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class DestinoService {
@@ -34,7 +33,7 @@ public class DestinoService {
 	@Transactional
 	public DestinoDTO atualizarDestino(DestinoUpdaterDTO dadosAtualizacao) {
 		if(!repository.existsById(dadosAtualizacao.id())) {
-			throw new EntityNotFoundException("Destino não encontrado com id: "+dadosAtualizacao.id());
+			throw new ObjetoNaoEncontadoException("Destino não encontrado com id: "+dadosAtualizacao.id());
 		}
 	
 		var destino = repository.getReferenceById(dadosAtualizacao.id());
@@ -46,7 +45,7 @@ public class DestinoService {
 	@Transactional
 	public String deletarDestino(Long id) {
 		if(!repository.existsById(id)) {
-			throw new EntityNotFoundException("Destino não encontrado com id: "+id);
+			throw new ObjetoNaoEncontadoException("Destino não encontrado com id: "+id);
 		}
 		repository.deleteById(id);
 		
@@ -57,14 +56,14 @@ public class DestinoService {
 	public List<DestinoDTO> buscarDestinosPeloNome(String nome) {
 		var destinos = repository.findByNome(nome);
 		if(destinos.isEmpty()) {
-			throw new EntityNotFoundException("Nenhum destino foi encontrado");
+			throw new ObjetoNaoEncontadoException("Nenhum destino foi encontrado");
 		}
 		return destinos.stream().map(DestinoDTO::new).toList();			
 	}
 
 	@Transactional(readOnly = true)
 	public DestinoDTO detalharDestino(Long id) {
-		var destino = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Destino com ID " + id + " não encontrado"));
+		var destino = repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontadoException("Destino com ID " + id + " não encontrado"));
 
 	    return new DestinoDTO(destino);
 	}
