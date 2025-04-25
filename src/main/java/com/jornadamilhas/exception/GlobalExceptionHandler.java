@@ -22,6 +22,10 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, Object>> tratarErroValidacao(MethodArgumentNotValidException ex) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(criarCorpoErroValidacao(ex));	
+	}
+	
+	private Map<String, Object> criarCorpoErroValidacao(MethodArgumentNotValidException ex) {
 		Map<String, Object> erros = new HashMap<>();
 		
 		for(FieldError erro: ex.getBindingResult().getFieldErrors()) {
@@ -34,7 +38,7 @@ public class GlobalExceptionHandler {
 		body.put("erro", "Erro de validação");
 		body.put("mensagens", erros);
 		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);	
+		return body;
 	}
 
 	@ExceptionHandler(ObjetoNaoEncontadoException.class)

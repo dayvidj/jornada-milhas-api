@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jornadamilhas.dto.DepoimentoDTO;
-import com.jornadamilhas.dto.DepoimentoUpdaterDTO;
+import com.jornadamilhas.dto.DepoimentoResponseDTO;
 import com.jornadamilhas.exception.ObjetoNaoEncontadoException;
 import com.jornadamilhas.model.Depoimento;
 import com.jornadamilhas.repository.DepoimentoRepository;
@@ -22,43 +24,42 @@ public class DepoimentoService {
 	private DepoimentoRepository repository;
 
 	@Transactional
-	public DepoimentoUpdaterDTO salvarDepoimento(DepoimentoDTO dados) {
+	public DepoimentoResponseDTO salvarDepoimento(DepoimentoDTO dados) {
 		var depoimento = repository.save(new Depoimento(dados));
-		return new DepoimentoUpdaterDTO(depoimento);
+		return new DepoimentoResponseDTO(depoimento);
 	}
 
 	@Transactional(readOnly = true)
-	public List<DepoimentoUpdaterDTO> listarDepoimentos() {
-		return repository.findAll().stream().map(DepoimentoUpdaterDTO::new).toList();
+	public Page<DepoimentoResponseDTO> listarDepoimentos(Pageable pageable) {
+		return repository.findAll(pageable).map(DepoimentoResponseDTO::new);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<DepoimentoDTO> listaAleatoria() {
+		var depoimentos = repository.findAll();
+		
+		var listaRandom = depoimentos.stream().map(DepoimentoDTO::new)
+				.collect(Collectors.toCollection(ArrayList::new));
+		
+		Collections.shuffle(listaRandom);
+		return listaRandom.stream().limit(3).toList();
 	}
 
 	@Transactional
-	public DepoimentoUpdaterDTO atualizarPorId(DepoimentoUpdaterDTO dados) {
+	public DepoimentoDTO atualizarPorId(DepoimentoResponseDTO dados) {
 		var depoimento = repository.findById(dados.id())
 				.orElseThrow(() -> new ObjetoNaoEncontadoException("Depoimento não encontrado"));
 
 		depoimento.atualizarDados(dados);
-		return new DepoimentoUpdaterDTO(depoimento);
+		return new DepoimentoDTO(depoimento);
 	}
 
 	@Transactional
 	public String deletarPorID(Long id) {
-		if (!repository.existsById(id)) {
-			throw new ObjetoNaoEncontadoException("Depoimento com ID "+id+" não existe.");
-		}
+		repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontadoException("Depoimento com ID "+id+" não existe."));
+		
 		repository.deleteById(id);
 		return "Depoimento deletado com sucesso!";
-	}
-
-	@Transactional(readOnly = true)
-	public List<DepoimentoDTO> listaAleatoria() {
-		var depoimentos = repository.findAll();
-
-		var listaRandom = depoimentos.stream().map(DepoimentoDTO::new)
-				.collect(Collectors.toCollection(ArrayList::new));
-
-		Collections.shuffle(listaRandom);
-		return listaRandom.stream().limit(3).toList();
 	}
 
 }

@@ -3,7 +3,7 @@ package com.jornadamilhas.model;
 import java.util.Optional;
 
 import com.jornadamilhas.dto.DepoimentoDTO;
-import com.jornadamilhas.dto.DepoimentoUpdaterDTO;
+import com.jornadamilhas.dto.DepoimentoResponseDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +34,7 @@ public class Depoimento {
 		this.nome = depoimento.nome();
 	}
 
-	public void atualizarDados(DepoimentoUpdaterDTO dados) {
+	public void atualizarDados(DepoimentoResponseDTO dados) {
 		Optional.ofNullable(dados.foto()).ifPresent(foto -> this.foto = foto);
 	    Optional.ofNullable(dados.texto()).ifPresent(texto -> this.texto = texto);
 	    Optional.ofNullable(dados.nome()).ifPresent(nome -> this.nome = nome);

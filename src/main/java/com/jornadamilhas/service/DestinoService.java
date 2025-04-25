@@ -3,11 +3,13 @@ package com.jornadamilhas.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jornadamilhas.dto.DestinoDTO;
-import com.jornadamilhas.dto.DestinoUpdaterDTO;
+import com.jornadamilhas.dto.DestinoResponseDTO;
 import com.jornadamilhas.exception.ObjetoNaoEncontadoException;
 import com.jornadamilhas.model.Destino;
 import com.jornadamilhas.repository.DestinoRepository;
@@ -19,37 +21,14 @@ public class DestinoService {
 	private DestinoRepository repository;
 	
 	@Transactional
-	public DestinoUpdaterDTO salvarDestino(DestinoDTO dados) {
+	public DestinoResponseDTO salvarDestino(DestinoDTO dados) {
 		var destino = repository.save(new Destino(dados));
-		return new DestinoUpdaterDTO(destino);
+		return new DestinoResponseDTO(destino);
 	}
 
 	@Transactional(readOnly = true)
-	public List<DestinoUpdaterDTO> exibirDestinos() {
-		var destinos = repository.findAll().stream().map(DestinoUpdaterDTO::new).toList();
-		return destinos;
-	}
-
-	@Transactional
-	public DestinoDTO atualizarDestino(DestinoUpdaterDTO dadosAtualizacao) {
-		if(!repository.existsById(dadosAtualizacao.id())) {
-			throw new ObjetoNaoEncontadoException("Destino não encontrado com id: "+dadosAtualizacao.id());
-		}
-	
-		var destino = repository.getReferenceById(dadosAtualizacao.id());
-		destino.atualizarDados(dadosAtualizacao);
-	
-		return new DestinoDTO(destino);
-	}
-
-	@Transactional
-	public String deletarDestino(Long id) {
-		if(!repository.existsById(id)) {
-			throw new ObjetoNaoEncontadoException("Destino não encontrado com id: "+id);
-		}
-		repository.deleteById(id);
-		
-		return "Destino deletado com sucesso.";
+	public Page<DestinoResponseDTO> exibirDestinos(Pageable pageable) {
+		return repository.findAll(pageable).map(DestinoResponseDTO::new);
 	}
 
 	@Transactional(readOnly = true)
@@ -60,12 +39,29 @@ public class DestinoService {
 		}
 		return destinos.stream().map(DestinoDTO::new).toList();			
 	}
-
+	
 	@Transactional(readOnly = true)
 	public DestinoDTO detalharDestino(Long id) {
 		var destino = repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontadoException("Destino com ID " + id + " não encontrado"));
-
-	    return new DestinoDTO(destino);
+		
+		return new DestinoDTO(destino);
 	}
 	
+	@Transactional
+	public DestinoDTO atualizarDestino(DestinoResponseDTO dadosAtualizacao) {
+		var destino = repository.findById(dadosAtualizacao.id())
+				.orElseThrow(() -> new ObjetoNaoEncontadoException("Destino não encontrado"));
+		
+		destino.atualizarDados(dadosAtualizacao);
+		return new DestinoDTO(destino);
+	}
+
+	@Transactional
+	public String deletarDestino(Long id) {
+		repository.findById(id).orElseThrow(() -> new ObjetoNaoEncontadoException("Destino com ID " + id + " não encontrado"));
+		
+		repository.deleteById(id);
+		return "Destino deletado com sucesso.";
+	}
+
 }

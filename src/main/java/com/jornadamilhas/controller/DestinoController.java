@@ -3,6 +3,8 @@ package com.jornadamilhas.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jornadamilhas.dto.DestinoDTO;
-import com.jornadamilhas.dto.DestinoUpdaterDTO;
+import com.jornadamilhas.dto.DestinoResponseDTO;
 import com.jornadamilhas.service.DestinoService;
 
 import jakarta.validation.Valid;
@@ -29,25 +31,19 @@ public class DestinoController {
 	private DestinoService destinoService;
 
 	@PostMapping
-	public ResponseEntity<DestinoUpdaterDTO> salvar(@RequestBody @Valid DestinoDTO dadosDestino) {
+	public ResponseEntity<DestinoResponseDTO> salvar(@RequestBody @Valid DestinoDTO dadosDestino) {
 		var retorno = destinoService.salvarDestino(dadosDestino);
 		return ResponseEntity.status(HttpStatus.CREATED).body(retorno);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<DestinoUpdaterDTO>> exibir() {
-		return ResponseEntity.ok(destinoService.exibirDestinos());
+	public ResponseEntity<Page<DestinoResponseDTO>> exibirTodos(Pageable pageable) {
+		return ResponseEntity.ok(destinoService.exibirDestinos(pageable));
 	}
 
-	@PutMapping
-	public ResponseEntity<DestinoDTO> atualizar(@RequestBody @Valid DestinoUpdaterDTO dadosAtualizacao) {
-		var destinoAtualizado = destinoService.atualizarDestino(dadosAtualizacao);
-		return ResponseEntity.ok(destinoAtualizado);
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deletar(@PathVariable Long id) {
-		return ResponseEntity.ok(destinoService.deletarDestino(id));
+	@GetMapping("/{id}")
+	public ResponseEntity<DestinoDTO> detalhar(@PathVariable Long id) {
+		return ResponseEntity.ok(destinoService.detalharDestino(id));
 	}
 
 	@GetMapping("/busca")
@@ -55,9 +51,15 @@ public class DestinoController {
 		return ResponseEntity.ok(destinoService.buscarDestinosPeloNome(nome));
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<DestinoDTO> detalhar(@PathVariable Long id) {
-		return ResponseEntity.ok(destinoService.detalharDestino(id));
+	@PutMapping
+	public ResponseEntity<DestinoDTO> atualizar(@RequestBody @Valid DestinoResponseDTO dadosAtualizacao) {
+		var destinoAtualizado = destinoService.atualizarDestino(dadosAtualizacao);
+		return ResponseEntity.ok(destinoAtualizado);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deletar(@PathVariable Long id) {
+		return ResponseEntity.ok(destinoService.deletarDestino(id));
 	}
 
 }

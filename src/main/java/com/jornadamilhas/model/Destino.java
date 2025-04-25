@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import com.jornadamilhas.dto.DestinoDTO;
-import com.jornadamilhas.dto.DestinoUpdaterDTO;
+import com.jornadamilhas.dto.DestinoResponseDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,7 +45,7 @@ public class Destino {
 		this.preco = destino.preco();
 	}
 
-	public void atualizarDados(DestinoUpdaterDTO dadosAtualizacao) {
+	public void atualizarDados(DestinoResponseDTO dadosAtualizacao) {
 		Optional.ofNullable(dadosAtualizacao.fotoOne()).ifPresent(fotoOne -> this.fotoOne = fotoOne);
 		Optional.ofNullable(dadosAtualizacao.fotoTwo()).ifPresent(fotoTwo -> this.fotoTwo = fotoTwo);
 		Optional.ofNullable(dadosAtualizacao.nome()).ifPresent(nome -> this.nome = nome);
